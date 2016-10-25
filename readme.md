@@ -1,4 +1,4 @@
-OpenCPU APP: appdemo
+TNTP Sample Teacher Data App
 ====================
   
 The purpose of this OpenCPU app is to demonstrate how to use the [opencpu.js](http://github.com/jeroenooms/opencpu.js) library for calling R functions from Javascript using OpenCPU.  
