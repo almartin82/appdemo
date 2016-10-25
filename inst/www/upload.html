@@ -25,9 +25,8 @@
         $("#submitbutton").attr("disabled", "disabled");
 
         //perform the request
-        var req = ocpu.call("readcsvnew", {
-          file : myfile,
-          header : myheader
+        var req = ocpu.call("staff_histogram", {
+          edfi_csv : myfile
         }, function(session){
           $("#printlink").attr("href", session.getLoc() + "R/.val/print")
           $("#rdalink").attr("href", session.getLoc() + "R/.val/rda")
