@@ -10,14 +10,59 @@
     <script>
     //init this script when the page has loaded
     $(document).ready(function(){
+      
+      $("#submitcsv").on("click", function(){
+
+        //arguments
+        var myheader = $("#header").val() == "true";
+        var myfile = $("#csvfile")[0].files[0];
+        
+        if(!myfile){
+          alert("No file selected.");
+          return;
+        }
+
+        //disable the button during upload
+        $("#submitcsv").attr("disabled", "disabled");
+
+        //perform the request
+        var req = ocpu.call("readcsvnew", {
+          file : myfile,
+          header : myheader
+        }, function(session){
+          console.log(session)
+          /*$("#printlink").attr("href", session.getLoc() + "R/.val/print")
+          $("#rdalink").attr("href", session.getLoc() + "R/.val/rda")
+          $("#csvlink").attr("href", session.getLoc() + "R/.val/csv")
+          $("#tablink").attr("href", session.getLoc() + "R/.val/tab")
+          $("#jsonlink").attr("href", session.getLoc() + "R/.val/json")
+          $("#mdlink").attr("href", session.getLoc() + "R/.val/md")*/
+        });
+        
+        //if R returns an error, alert the error message
+        req.fail(function(){
+          alert("Server error: " + req.responseText);
+        });
+        
+        //after request complete, re-enable the button 
+        req.always(function(){
+          $("#submitcsv").removeAttr("disabled")
+        });        
+      });    
+      
       $("#submitbutton").on("click", function(){
         
+        //disable the button to prevent multiple clicks
+        $("#submitbutton").attr("disabled", "disabled");
+        
         //read the value for 'myname'
-        var myfile = $("#csvfile")[0].files[0];
-
+        var nfield = parseInt($("#nfield").val());
+        var distfield = $("#distfield").val();
+        
         //create the plot area on the plotdiv element
-        var req = $("#plotdiv").rplot("staff_histogram", {
-          edfi_csv : myfile
+        var req = $("#plotdiv").rplot("randomplot", {
+          n : nfield,
+          dist : distfield
         })
 
         //if R returns an error, alert the error message
@@ -47,9 +92,24 @@
   <body>
     <h1>Basic plotting</h1>
     
+    <b>File</b> <input type="file" id="csvfile"> 
     <br />
-    <button id="submitbutton" type="button">Upload CSV file!</button>
+    
+    <b>Header</b> <select id="header">
+      <option>true</option>
+      <option>false</option>
+    </select> 
+    
+    <br />
+    <button id="submitcsv" type="button">Upload CSV file!</button>
     <br>
+    
+    <b>n (count) </b> <input type="number" id="nfield" value="1000">
+    
+    <b>distribution type</b> <select id="distfield">
+      <option>normal</option>
+      <option>uniform</option>
+    </select> 
     
     <br />
     <button id="submitbutton" type="button">Submit to server!</button>

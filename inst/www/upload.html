@@ -10,7 +10,7 @@
     <script>
     //init this script when the page has loaded
     $(document).ready(function(){
-      $("#submitbutton").on("click", function(){
+      $("#submitcsv").on("click", function(){
 
         //arguments
         var myheader = $("#header").val() == "true";
@@ -22,11 +22,12 @@
         }
 
         //disable the button during upload
-        $("#submitbutton").attr("disabled", "disabled");
+        $("#submitcsv").attr("disabled", "disabled");
 
         //perform the request
-        var req = ocpu.call("staff_histogram", {
-          edfi_csv : myfile
+        var req = ocpu.call("readcsvnew", {
+          file : myfile,
+          header : myheader
         }, function(session){
           $("#printlink").attr("href", session.getLoc() + "R/.val/print")
           $("#rdalink").attr("href", session.getLoc() + "R/.val/rda")
@@ -43,7 +44,7 @@
         
         //after request complete, re-enable the button 
         req.always(function(){
-          $("#submitbutton").removeAttr("disabled")
+          $("#submitcsv").removeAttr("disabled")
         });        
       });       
     });
@@ -67,7 +68,7 @@
     </select> 
     
     <br />
-    <button id="submitbutton" type="button">Upload CSV file!</button>
+    <button id="submitcsv" type="button">Upload CSV file!</button>
     <br>
 
     <p>Export the data frame:</p>
